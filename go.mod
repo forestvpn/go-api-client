@@ -1,4 +1,4 @@
-module github.com/forestvpn/go-api-client/node
+module github.com/forestvpn/go-api-client
 
 go 1.15
 
