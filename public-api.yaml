@@ -1,0 +1,83 @@
+swagger: "2.0"
+info:
+  title: ForestVPN Public API
+  description: |
+    ForestVPN defeats content restrictions and censorship to deliver unlimited access to video, music, social media,
+    and more, from anywhere in the world.
+  termsOfService: https://www.forestvpn.com/terms/
+  contact:
+    name: Digital Services LLC
+    url: https://www.forestvpn.com/
+    email: support@forestvpn.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+
+externalDocs:
+  description: Find more info here
+  url: https://www.forestvpn.com/
+
+
+host: api.forestvpn.com
+basePath: /v2
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    in: header
+    name: Authorization
+
+security:
+  - Bearer: [ ]
+
+paths:
+  /devices/{deviceID}/bindings/:
+    get:
+      summary: Device bindings
+      description: |
+        Each device has bindings to specific servers. This method returns hostnames where this device
+        bonded at a particular time.
+      operationId: BindingList
+      tags:
+        - device
+      parameters:
+        - in: path
+          name: deviceID
+          type: string
+          format: uuid
+          required: true
+          description: |
+            Device ID
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/DeviceBindings"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+        example: internal_server_error
+      message:
+        type: string
+        example: something went wrong
+  DeviceBindings:
+    type: array
+    items:
+      type: string
+      example: example.com

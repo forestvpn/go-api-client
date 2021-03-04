@@ -1,0 +1,147 @@
+swagger: "2.0"
+info:
+  title: ForestVPN Node API
+  description: |
+    ForestVPN defeats content restrictions and censorship to deliver unlimited access to video, music, social media,
+    and more, from anywhere in the world.
+  termsOfService: https://www.forestvpn.com/terms/
+  contact:
+    name: Digital Services LLC
+    url: https://www.forestvpn.com/
+    email: support@forestvpn.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+
+externalDocs:
+  description: Find more info here
+  url: https://www.forestvpn.com/
+
+
+host: api.forestvpn.com
+basePath: /internal/v2/
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    in: header
+    name: Authorization
+  Basic:
+    type: basic
+
+security:
+  - Basic: [ ]
+
+paths:
+  /devices/:
+    get:
+      summary: List of device that should be presented on host
+      operationId: DeviceList
+      tags:
+        - device
+      parameters:
+        - in: header
+          name: X-Relay-Hostname
+          type: string
+          required: true
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/DeviceList"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+  /stats/:
+    post:
+      summary: Connected devices stats to the API
+      operationId: DevicesStatsUpdate
+      tags:
+        - device
+      parameters:
+        - in: body
+          name: request
+          schema:
+            $ref: "#/definitions/DeviceStatsMap"
+          required: true
+        - in: header
+          name: X-Relay-Hostname
+          type: string
+          required: true
+      responses:
+        200:
+          description: ok
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  WireguardSpec:
+    type: object
+    properties:
+      pub_key:
+        type: string
+      ps_key:
+        type: string
+  DeviceList:
+    type: array
+    items:
+      $ref: "#/definitions/Device"
+  Device:
+    type: object
+    properties:
+      ips:
+        type: array
+        items:
+          type: string
+        x-go-name: IPs
+      ports:
+        type: array
+        items:
+          type: integer
+      wireguard:
+        type: object
+        $ref: "#/definitions/WireguardSpec"
+  DeviceStats:
+    type: object
+    properties:
+      connections:
+        type: integer
+        description: Number of active connections
+      received_bytes:
+        type: integer
+      transmitted_bytes:
+        type: integer
+  DeviceStatsMap:
+    type: object
+    additionalProperties:
+      $ref: "#/definitions/DeviceStats"
+  DeviceEvent:
+    type: object
+    properties:
+      action:
+        type: string
+        enum:
+          - create
+          - update
+          - delete
+          - update_ports
+      device:
+        $ref: "#/definitions/Device"
