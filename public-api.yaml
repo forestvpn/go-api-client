@@ -65,6 +65,31 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/Error"
+  /devices/{deviceID}/peers/:
+    get:
+      summary: Device Peers
+      description: |
+        Retrieve device peers
+      operationId: PeersList
+      tags:
+        - device
+      parameters:
+        - in: path
+          name: deviceID
+          type: string
+          format: uuid
+          required: true
+          description: |
+            Device ID
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/DevicePeers"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
 
 definitions:
   Error:
@@ -81,3 +106,26 @@ definitions:
     items:
       type: string
       example: example.com
+  WireGuardPeer:
+    type: object
+    properties:
+      pub_key:
+        type: string
+      ps_key:
+        type: string
+      endpoint:
+        type: string
+  DevicePeer:
+    type: object
+    properties:
+      allowed_ips:
+        type: array
+        items:
+          type: string
+      wireguard:
+        $ref: "#/definitions/WireGuardPeer"
+  DevicePeers:
+    type: array
+    items:
+      $ref: "#/definitions/DevicePeer"
+
