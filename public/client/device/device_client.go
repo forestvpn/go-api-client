@@ -30,6 +30,8 @@ type ClientOption func(*runtime.ClientOperation)
 type ClientService interface {
 	BindingList(params *BindingListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*BindingListOK, error)
 
+	GetByID(params *GetByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetByIDOK, error)
+
 	PeersList(params *PeersListParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*PeersListOK, error)
 
 	SetTransport(transport runtime.ClientTransport)
@@ -74,6 +76,47 @@ func (a *Client) BindingList(params *BindingListParams, authInfo runtime.ClientA
 	}
 	// unexpected success response
 	unexpectedSuccess := result.(*BindingListDefault)
+	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
+}
+
+/*
+  GetByID devices info
+
+  Retrieve device info
+
+*/
+func (a *Client) GetByID(params *GetByIDParams, authInfo runtime.ClientAuthInfoWriter, opts ...ClientOption) (*GetByIDOK, error) {
+	// TODO: Validate the params before sending
+	if params == nil {
+		params = NewGetByIDParams()
+	}
+	op := &runtime.ClientOperation{
+		ID:                 "GetByID",
+		Method:             "GET",
+		PathPattern:        "/devices/{deviceID}/",
+		ProducesMediaTypes: []string{"application/json"},
+		ConsumesMediaTypes: []string{"application/json"},
+		Schemes:            []string{"http", "https"},
+		Params:             params,
+		Reader:             &GetByIDReader{formats: a.formats},
+		AuthInfo:           authInfo,
+		Context:            params.Context,
+		Client:             params.HTTPClient,
+	}
+	for _, opt := range opts {
+		opt(op)
+	}
+
+	result, err := a.transport.Submit(op)
+	if err != nil {
+		return nil, err
+	}
+	success, ok := result.(*GetByIDOK)
+	if ok {
+		return success, nil
+	}
+	// unexpected success response
+	unexpectedSuccess := result.(*GetByIDDefault)
 	return nil, runtime.NewAPIError("unexpected success response: content available as default response in error", unexpectedSuccess, unexpectedSuccess.Code())
 }
 

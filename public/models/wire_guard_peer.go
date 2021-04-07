@@ -7,7 +7,9 @@ package models
 
 import (
 	"context"
+	"strconv"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 )
@@ -20,6 +22,9 @@ type WireGuardPeer struct {
 	// endpoint
 	Endpoint string `json:"endpoint,omitempty"`
 
+	// ips
+	Ips []IP `json:"ips"`
+
 	// ps key
 	PsKey string `json:"ps_key,omitempty"`
 
@@ -29,11 +34,64 @@ type WireGuardPeer struct {
 
 // Validate validates this wire guard peer
 func (m *WireGuardPeer) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateIps(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
 	return nil
 }
 
-// ContextValidate validates this wire guard peer based on context it is used
+func (m *WireGuardPeer) validateIps(formats strfmt.Registry) error {
+	if swag.IsZero(m.Ips) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Ips); i++ {
+
+		if err := m.Ips[i].Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
+			}
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// ContextValidate validate this wire guard peer based on the context it is used
 func (m *WireGuardPeer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.contextValidateIps(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *WireGuardPeer) contextValidateIps(ctx context.Context, formats strfmt.Registry) error {
+
+	for i := 0; i < len(m.Ips); i++ {
+
+		if err := m.Ips[i].ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
+			}
+			return err
+		}
+
+	}
+
 	return nil
 }
 

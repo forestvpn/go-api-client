@@ -65,6 +65,31 @@ paths:
           description: error
           schema:
             $ref: "#/definitions/Error"
+  /devices/{deviceID}/:
+    get:
+      summary: Device Info
+      description: |
+        Retrieve device info
+      operationId: GetByID
+      tags:
+        - device
+      parameters:
+        - in: path
+          name: deviceID
+          type: string
+          format: uuid
+          required: true
+          description: |
+            Device ID
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/DevicePeers"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
   /devices/{deviceID}/peers/:
     get:
       summary: Device Peers
@@ -101,6 +126,89 @@ definitions:
       message:
         type: string
         example: something went wrong
+  Country:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      emoji:
+        type: string
+  Location:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      country:
+        $ref: "#/definitions/Country"
+  IP:
+    type: string
+  DNS:
+    type: string
+  Port:
+    type: integer
+  WireGuardKey:
+    type: string
+  WireGuard:
+    type: object
+    properties:
+      priv_key:
+        $ref: "#/definitions/WireGuardKey"
+      pub_key:
+        $ref: "#/definitions/WireGuardKey"
+      peers:
+        type: array
+        items:
+          $ref: "#/definitions/WireGuardPeer"
+  DeviceStats:
+    type: object
+    properties:
+      connections:
+        type: number
+      received_bytes:
+        type: number
+      transmitted_bytes:
+        type: number
+  Device:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      external_key:
+        type: string
+      name:
+        type: string
+      ips:
+        type: array
+        items:
+          $ref: "#/definitions/IP"
+      dns:
+        type: array
+        items:
+          $ref: "#/definitions/DNS"
+      ports:
+        type: array
+        items:
+          $ref: "#/definitions/Port"
+      wireguard:
+        $ref: "#/definitions/WireGuard"
+      locations:
+        type: array
+        items:
+          $ref: "#/definitions/Location"
+      last_active_at:
+        type: string
+        format: date-time
+      stats:
+        $ref: "#/definitions/DeviceStats"
   DeviceBindings:
     type: array
     items:
@@ -115,13 +223,13 @@ definitions:
         type: string
       endpoint:
         type: string
+      ips:
+        type: array
+        items:
+          $ref: "#/definitions/IP"
   DevicePeer:
     type: object
     properties:
-      allowed_ips:
-        type: array
-        items:
-          type: string
       wireguard:
         $ref: "#/definitions/WireGuardPeer"
   DevicePeers:

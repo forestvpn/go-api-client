@@ -18,9 +18,6 @@ import (
 // swagger:model DevicePeer
 type DevicePeer struct {
 
-	// allowed ips
-	AllowedIps []string `json:"allowed_ips"`
-
 	// wireguard
 	Wireguard *WireGuardPeer `json:"wireguard,omitempty"`
 }
