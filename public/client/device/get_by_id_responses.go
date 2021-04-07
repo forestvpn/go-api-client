@@ -51,20 +51,22 @@ func NewGetByIDOK() *GetByIDOK {
 ok
 */
 type GetByIDOK struct {
-	Payload models.DevicePeers
+	Payload *models.Device
 }
 
 func (o *GetByIDOK) Error() string {
 	return fmt.Sprintf("[GET /devices/{deviceID}/][%d] getByIdOK  %+v", 200, o.Payload)
 }
-func (o *GetByIDOK) GetPayload() models.DevicePeers {
+func (o *GetByIDOK) GetPayload() *models.Device {
 	return o.Payload
 }
 
 func (o *GetByIDOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
 
+	o.Payload = new(models.Device)
+
 	// response payload
-	if err := consumer.Consume(response.Body(), &o.Payload); err != nil && err != io.EOF {
+	if err := consumer.Consume(response.Body(), o.Payload); err != nil && err != io.EOF {
 		return err
 	}
 

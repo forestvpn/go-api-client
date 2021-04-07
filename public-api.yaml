@@ -85,7 +85,7 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/DevicePeers"
+            $ref: "#/definitions/Device"
         default:
           description: error
           schema:
