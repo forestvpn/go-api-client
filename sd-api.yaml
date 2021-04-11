@@ -1,0 +1,86 @@
+swagger: "2.0"
+info:
+  title: ForestVPN Service Discovery API
+  description: |
+    ForestVPN defeats content restrictions and censorship to deliver unlimited access to video, music, social media,
+    and more, from anywhere in the world.
+  termsOfService: https://www.forestvpn.com/terms/
+  contact:
+    name: Digital Services LLC
+    url: https://www.forestvpn.com/
+    email: support@forestvpn.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "2.0"
+
+externalDocs:
+  description: Find more info here
+  url: https://www.forestvpn.com/
+
+
+host: api.forestvpn.com
+basePath: /sd/v2/
+schemes:
+  - https
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    in: header
+    name: Authorization
+
+security:
+  - Bearer: [ ]
+
+paths:
+  /wg/peers/:
+    get:
+      summary: List of device peers should be presented on client
+      operationId: PeersList
+      tags:
+        - wireguard
+      parameters:
+        - in: header
+          name: X-Relay-Hostname
+          type: string
+          required: true
+      responses:
+        200:
+          description: ok
+          schema:
+            $ref: "#/definitions/WireGuardPeersList"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  WireGuardPeersList:
+    type: array
+    items:
+      $ref: "#/definitions/WireGuardPeer"
+  WireGuardPeer:
+    type: object
+    properties:
+      ips:
+        type: array
+        items:
+          type: string
+        x-go-name: IPs
+      pub_key:
+        type: string
+      ps_key:
+        type: string
