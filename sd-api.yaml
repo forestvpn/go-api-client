@@ -54,7 +54,7 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/WireGuardPeersList"
+            $ref: "#/definitions/WireGuardPeers"
         default:
           description: error
           schema:
@@ -68,7 +68,7 @@ definitions:
         type: string
       message:
         type: string
-  WireGuardPeersList:
+  WireGuardPeers:
     type: array
     items:
       $ref: "#/definitions/WireGuardPeer"

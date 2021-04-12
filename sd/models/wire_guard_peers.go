@@ -14,13 +14,13 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// WireGuardPeersList wire guard peers list
+// WireGuardPeers wire guard peers
 //
-// swagger:model WireGuardPeersList
-type WireGuardPeersList []*WireGuardPeer
+// swagger:model WireGuardPeers
+type WireGuardPeers []*WireGuardPeer
 
-// Validate validates this wire guard peers list
-func (m WireGuardPeersList) Validate(formats strfmt.Registry) error {
+// Validate validates this wire guard peers
+func (m WireGuardPeers) Validate(formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {
@@ -45,8 +45,8 @@ func (m WireGuardPeersList) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-// ContextValidate validate this wire guard peers list based on the context it is used
-func (m WireGuardPeersList) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+// ContextValidate validate this wire guard peers based on the context it is used
+func (m WireGuardPeers) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
 	for i := 0; i < len(m); i++ {
