@@ -45,11 +45,6 @@ paths:
       operationId: PeersList
       tags:
         - wireguard
-      parameters:
-        - in: header
-          name: X-Relay-Hostname
-          type: string
-          required: true
       responses:
         200:
           description: ok

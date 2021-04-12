@@ -58,10 +58,6 @@ func NewPeersListParamsWithHTTPClient(client *http.Client) *PeersListParams {
    Typically these are written to a http.Request.
 */
 type PeersListParams struct {
-
-	// XRelayHostname.
-	XRelayHostname string
-
 	timeout    time.Duration
 	Context    context.Context
 	HTTPClient *http.Client
@@ -115,17 +111,6 @@ func (o *PeersListParams) SetHTTPClient(client *http.Client) {
 	o.HTTPClient = client
 }
 
-// WithXRelayHostname adds the xRelayHostname to the peers list params
-func (o *PeersListParams) WithXRelayHostname(xRelayHostname string) *PeersListParams {
-	o.SetXRelayHostname(xRelayHostname)
-	return o
-}
-
-// SetXRelayHostname adds the xRelayHostname to the peers list params
-func (o *PeersListParams) SetXRelayHostname(xRelayHostname string) {
-	o.XRelayHostname = xRelayHostname
-}
-
 // WriteToRequest writes these params to a swagger request
 func (o *PeersListParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Registry) error {
 
@@ -133,11 +118,6 @@ func (o *PeersListParams) WriteToRequest(r runtime.ClientRequest, reg strfmt.Reg
 		return err
 	}
 	var res []error
-
-	// header param X-Relay-Hostname
-	if err := r.SetHeaderParam("X-Relay-Hostname", o.XRelayHostname); err != nil {
-		return err
-	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
