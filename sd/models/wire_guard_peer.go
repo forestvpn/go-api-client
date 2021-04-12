@@ -20,6 +20,9 @@ type WireGuardPeer struct {
 	// i ps
 	IPs []string `json:"ips"`
 
+	// endpoint
+	Endpoint string `json:"endpoint,omitempty"`
+
 	// ps key
 	PsKey string `json:"ps_key,omitempty"`
 

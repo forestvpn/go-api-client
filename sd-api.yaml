@@ -84,3 +84,5 @@ definitions:
         type: string
       ps_key:
         type: string
+      endpoint:
+        type: string
