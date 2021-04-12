@@ -20,6 +20,9 @@ import (
 // swagger:model Device
 type Device struct {
 
+	// i ps
+	IPs []IP `json:"ips"`
+
 	// dns
 	DNS []DNS `json:"dns"`
 
@@ -29,9 +32,6 @@ type Device struct {
 	// id
 	// Format: uuid
 	ID strfmt.UUID `json:"id,omitempty"`
-
-	// ips
-	Ips []IP `json:"ips"`
 
 	// last active at
 	// Format: date-time
@@ -57,15 +57,15 @@ type Device struct {
 func (m *Device) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateIPs(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateDNS(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if err := m.validateID(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateIps(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -95,6 +95,25 @@ func (m *Device) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *Device) validateIPs(formats strfmt.Registry) error {
+	if swag.IsZero(m.IPs) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.IPs); i++ {
+
+		if err := m.IPs[i].Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
+			}
+			return err
+		}
+
+	}
+
+	return nil
+}
+
 func (m *Device) validateDNS(formats strfmt.Registry) error {
 	if swag.IsZero(m.DNS) { // not required
 		return nil
@@ -121,25 +140,6 @@ func (m *Device) validateID(formats strfmt.Registry) error {
 
 	if err := validate.FormatOf("id", "body", "uuid", m.ID.String(), formats); err != nil {
 		return err
-	}
-
-	return nil
-}
-
-func (m *Device) validateIps(formats strfmt.Registry) error {
-	if swag.IsZero(m.Ips) { // not required
-		return nil
-	}
-
-	for i := 0; i < len(m.Ips); i++ {
-
-		if err := m.Ips[i].Validate(formats); err != nil {
-			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
-			}
-			return err
-		}
-
 	}
 
 	return nil
@@ -238,11 +238,11 @@ func (m *Device) validateWireguard(formats strfmt.Registry) error {
 func (m *Device) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateDNS(ctx, formats); err != nil {
+	if err := m.contextValidateIPs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
-	if err := m.contextValidateIps(ctx, formats); err != nil {
+	if err := m.contextValidateDNS(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -268,13 +268,13 @@ func (m *Device) ContextValidate(ctx context.Context, formats strfmt.Registry) e
 	return nil
 }
 
-func (m *Device) contextValidateDNS(ctx context.Context, formats strfmt.Registry) error {
+func (m *Device) contextValidateIPs(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.DNS); i++ {
+	for i := 0; i < len(m.IPs); i++ {
 
-		if err := m.DNS[i].ContextValidate(ctx, formats); err != nil {
+		if err := m.IPs[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("dns" + "." + strconv.Itoa(i))
+				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
 			}
 			return err
 		}
@@ -284,13 +284,13 @@ func (m *Device) contextValidateDNS(ctx context.Context, formats strfmt.Registry
 	return nil
 }
 
-func (m *Device) contextValidateIps(ctx context.Context, formats strfmt.Registry) error {
+func (m *Device) contextValidateDNS(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Ips); i++ {
+	for i := 0; i < len(m.DNS); i++ {
 
-		if err := m.Ips[i].ContextValidate(ctx, formats); err != nil {
+		if err := m.DNS[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
-				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
+				return ve.ValidateName("dns" + "." + strconv.Itoa(i))
 			}
 			return err
 		}

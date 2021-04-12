@@ -19,11 +19,11 @@ import (
 // swagger:model WireGuardPeer
 type WireGuardPeer struct {
 
+	// i ps
+	IPs []IP `json:"ips"`
+
 	// endpoint
 	Endpoint string `json:"endpoint,omitempty"`
-
-	// ips
-	Ips []IP `json:"ips"`
 
 	// ps key
 	PsKey string `json:"ps_key,omitempty"`
@@ -36,7 +36,7 @@ type WireGuardPeer struct {
 func (m *WireGuardPeer) Validate(formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.validateIps(formats); err != nil {
+	if err := m.validateIPs(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -46,14 +46,14 @@ func (m *WireGuardPeer) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
-func (m *WireGuardPeer) validateIps(formats strfmt.Registry) error {
-	if swag.IsZero(m.Ips) { // not required
+func (m *WireGuardPeer) validateIPs(formats strfmt.Registry) error {
+	if swag.IsZero(m.IPs) { // not required
 		return nil
 	}
 
-	for i := 0; i < len(m.Ips); i++ {
+	for i := 0; i < len(m.IPs); i++ {
 
-		if err := m.Ips[i].Validate(formats); err != nil {
+		if err := m.IPs[i].Validate(formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
 			}
@@ -69,7 +69,7 @@ func (m *WireGuardPeer) validateIps(formats strfmt.Registry) error {
 func (m *WireGuardPeer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
 	var res []error
 
-	if err := m.contextValidateIps(ctx, formats); err != nil {
+	if err := m.contextValidateIPs(ctx, formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -79,11 +79,11 @@ func (m *WireGuardPeer) ContextValidate(ctx context.Context, formats strfmt.Regi
 	return nil
 }
 
-func (m *WireGuardPeer) contextValidateIps(ctx context.Context, formats strfmt.Registry) error {
+func (m *WireGuardPeer) contextValidateIPs(ctx context.Context, formats strfmt.Registry) error {
 
-	for i := 0; i < len(m.Ips); i++ {
+	for i := 0; i < len(m.IPs); i++ {
 
-		if err := m.Ips[i].ContextValidate(ctx, formats); err != nil {
+		if err := m.IPs[i].ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
 				return ve.ValidateName("ips" + "." + strconv.Itoa(i))
 			}

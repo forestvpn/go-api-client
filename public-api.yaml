@@ -190,6 +190,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/IP"
+        x-go-name: IPs
       dns:
         type: array
         items:
@@ -227,6 +228,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/IP"
+        x-go-name: IPs
   DevicePeer:
     type: object
     properties:
