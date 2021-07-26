@@ -41,6 +41,28 @@ security:
   - Basic: [ ]
 
 paths:
+  /interfaces/:
+    get:
+      summary: List of network interfaces configuration and specs
+      operationId: InterfaceList
+      tags:
+        - network
+      parameters:
+        - in: header
+          name: X-Relay-Hostname
+          type: string
+          required: true
+      responses:
+        200:
+          description: ok
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/InterfaceSpec"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/Error"
   /devices/:
     get:
       summary: List of device that should be presented on host
@@ -93,12 +115,21 @@ definitions:
         type: string
       message:
         type: string
+  PortForwarding:
+    type: object
+    properties:
+      src:
+        type: integer
+      dst:
+        type: integer
   WireguardSpec:
     type: object
     properties:
       pub_key:
         type: string
       ps_key:
+        type: string
+      endpoint:
         type: string
   DeviceList:
     type: array
@@ -115,7 +146,7 @@ definitions:
       ports:
         type: array
         items:
-          type: integer
+          $ref: "#/definitions/PortForwarding"
       wireguard:
         type: object
         $ref: "#/definitions/WireguardSpec"
@@ -145,3 +176,25 @@ definitions:
           - update_ports
       device:
         $ref: "#/definitions/Device"
+  WireguardInterfaceSpec:
+    type: object
+    properties:
+      priv_key:
+        type: string
+      ports:
+        type: array
+        items:
+          type: integer
+        x-go-name: IPs
+  InterfaceSpec:
+    type: object
+    properties:
+      name:
+        type: string
+      ips:
+        type: array
+        items:
+          type: string
+        x-go-name: IPs
+      wireguard:
+        $ref: "#/definitions/WireguardInterfaceSpec"

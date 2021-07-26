@@ -30,7 +30,7 @@ produces:
   - application/json
 
 securityDefinitions:
-  Bearer:
+  WireGuard:
     type: apiKey
     in: header
     name: Authorization

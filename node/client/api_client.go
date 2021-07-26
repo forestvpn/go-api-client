@@ -11,6 +11,7 @@ import (
 	"github.com/go-openapi/strfmt"
 
 	"github.com/forestvpn/go-api-client/node/client/device"
+	"github.com/forestvpn/go-api-client/node/client/network"
 )
 
 // Default API HTTP client.
@@ -56,6 +57,7 @@ func New(transport runtime.ClientTransport, formats strfmt.Registry) *API {
 	cli := new(API)
 	cli.Transport = transport
 	cli.Device = device.New(transport, formats)
+	cli.Network = network.New(transport, formats)
 	return cli
 }
 
@@ -102,6 +104,8 @@ func (cfg *TransportConfig) WithSchemes(schemes []string) *TransportConfig {
 type API struct {
 	Device device.ClientService
 
+	Network network.ClientService
+
 	Transport runtime.ClientTransport
 }
 
@@ -109,4 +113,5 @@ type API struct {
 func (c *API) SetTransport(transport runtime.ClientTransport) {
 	c.Transport = transport
 	c.Device.SetTransport(transport)
+	c.Network.SetTransport(transport)
 }

@@ -17,6 +17,9 @@ import (
 // swagger:model WireguardSpec
 type WireguardSpec struct {
 
+	// endpoint
+	Endpoint string `json:"endpoint,omitempty"`
+
 	// ps key
 	PsKey string `json:"ps_key,omitempty"`
 
