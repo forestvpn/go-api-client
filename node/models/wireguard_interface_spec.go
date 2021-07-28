@@ -17,8 +17,8 @@ import (
 // swagger:model WireguardInterfaceSpec
 type WireguardInterfaceSpec struct {
 
-	// i ps
-	IPs []int64 `json:"ports"`
+	// ports
+	Ports []int64 `json:"ports"`
 
 	// priv key
 	PrivKey string `json:"priv_key,omitempty"`

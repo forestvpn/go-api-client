@@ -185,7 +185,6 @@ definitions:
         type: array
         items:
           type: integer
-        x-go-name: IPs
   InterfaceSpec:
     type: object
     properties:
