@@ -9,19 +9,45 @@ import (
 	"context"
 
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag"
 )
 
 // Port port
 //
 // swagger:model Port
-type Port int64
+type Port struct {
+
+	// dst
+	Dst int64 `json:"dst,omitempty"`
+
+	// src
+	Src int64 `json:"src,omitempty"`
+}
 
 // Validate validates this port
-func (m Port) Validate(formats strfmt.Registry) error {
+func (m *Port) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
 // ContextValidate validates this port based on context it is used
-func (m Port) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+func (m *Port) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *Port) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *Port) UnmarshalBinary(b []byte) error {
+	var res Port
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
 	return nil
 }

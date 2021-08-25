@@ -138,6 +138,9 @@ definitions:
   Device:
     type: object
     properties:
+      fwmark:
+        type: integer
+        x-go-name: FwMark
       ips:
         type: array
         items:

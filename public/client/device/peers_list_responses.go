@@ -51,13 +51,13 @@ func NewPeersListOK() *PeersListOK {
 ok
 */
 type PeersListOK struct {
-	Payload models.DevicePeers
+	Payload []*models.DevicePeer
 }
 
 func (o *PeersListOK) Error() string {
 	return fmt.Sprintf("[GET /devices/{deviceID}/peers/][%d] peersListOK  %+v", 200, o.Payload)
 }
-func (o *PeersListOK) GetPayload() models.DevicePeers {
+func (o *PeersListOK) GetPayload() []*models.DevicePeer {
 	return o.Payload
 }
 

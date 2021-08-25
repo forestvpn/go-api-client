@@ -85,7 +85,7 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/Device"
+            $ref: "#/definitions/DeviceFullDetails"
         default:
           description: error
           schema:
@@ -110,7 +110,9 @@ paths:
         200:
           description: ok
           schema:
-            $ref: "#/definitions/DevicePeers"
+            type: array
+            items:
+              $ref: "#/definitions/DevicePeer"
         default:
           description: error
           schema:
@@ -153,7 +155,12 @@ definitions:
   DNS:
     type: string
   Port:
-    type: integer
+    type: object
+    properties:
+      src:
+        type: integer
+      dst:
+        type: integer
   WireGuardKey:
     type: string
   WireGuard:
@@ -176,7 +183,24 @@ definitions:
         type: number
       transmitted_bytes:
         type: number
-  Device:
+  DeviceShortDetails:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      external_key:
+        type: string
+      name:
+        type: string
+      locations:
+        type: array
+        items:
+          $ref: "#/definitions/Location"
+      last_active_at:
+        type: string
+        format: date-time
+  DeviceFullDetails:
     type: object
     properties:
       id:
@@ -234,8 +258,3 @@ definitions:
     properties:
       wireguard:
         $ref: "#/definitions/WireGuardPeer"
-  DevicePeers:
-    type: array
-    items:
-      $ref: "#/definitions/DevicePeer"
-

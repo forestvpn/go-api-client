@@ -19,6 +19,9 @@ import (
 // swagger:model Device
 type Device struct {
 
+	// fw mark
+	FwMark int64 `json:"fwmark,omitempty"`
+
 	// i ps
 	IPs []string `json:"ips"`
 
